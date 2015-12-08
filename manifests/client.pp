@@ -3,7 +3,17 @@ class ssh::client(
   $storeconfigs_enabled = true,
   $options              = {}
 ) inherits ssh::params {
-  $merged_options = merge($ssh::params::ssh_default_options, $options)
+
+  # Merge hashes from multiple layer of hierarchy in hiera
+  $hiera_options = hiera_hash("${module_name}::client::options", undef)
+
+  $fin_options = $hiera_options ? {
+    undef   => $options,
+    ''      => $options,
+    default => $hiera_options,
+  }
+
+  $merged_options = merge($ssh::params::ssh_default_options, $fin_options)
 
   include ssh::client::install
   include ssh::client::config
