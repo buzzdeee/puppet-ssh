@@ -59,6 +59,14 @@ class ssh::params {
       $ssh_known_hosts = '/etc/ssh/ssh_known_hosts'
       case $::operatingsystem {
         sles: {
+          case $::operatingsystemrelease {
+            '12.0': {
+              $service_provider = 'systemd'
+            }
+            default: {
+              $service_provider = undef
+            }
+          }
           $service_name = 'sshd'
           $sftp_server_path = '/usr/lib64/ssh/sftp-server'
         }
