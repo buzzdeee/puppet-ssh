@@ -9,6 +9,14 @@ class ssh::params {
       $ssh_known_hosts = '/etc/ssh/ssh_known_hosts'
       $service_name = 'ssh'
       $sftp_server_path = '/usr/lib/openssh/sftp-server'
+      case $::operatingsystemmajrelease {
+        '15.10': {
+          $service_provider = 'systemd'
+        }
+        default: {
+          $service_provider = undef
+        }
+      }
     }
     redhat: {
       $server_package_name = 'openssh-server'
@@ -59,6 +67,14 @@ class ssh::params {
       $ssh_known_hosts = '/etc/ssh/ssh_known_hosts'
       case $::operatingsystem {
         sles: {
+          case $::operatingsystemmajrelease {
+            '11': {
+              $service_provider = undef
+            }
+            default: {
+              $service_provider = 'systemd'
+            }
+          }
           $service_name = 'sshd'
           $sftp_server_path = '/usr/lib64/ssh/sftp-server'
         }
