@@ -42,8 +42,10 @@ Puppet::Functions.create_function(:'ssh::ipaddresses') do
 
       %w[bindings bindings6].each do |binding_type|
         next unless data.key?(binding_type)
+        next unless data[binding_type].is_a?(Array)
 
         data[binding_type].each do |binding|
+          next unless binding.is_a?(Hash)
           next unless binding.key?('address')
 
           result << binding['address']
