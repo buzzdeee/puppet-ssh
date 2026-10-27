@@ -77,6 +77,7 @@ class ssh::hostkeys (
     if $key_type in $facts['ssh'] {
       @@sshkey { "${fqdn_real}_${key_type}":
         ensure       => present,
+	name         => "${fqdn_real}_${key_type}",
         host_aliases => $host_aliases,
         type         => $facts['ssh'][$key_type]['type'],
         key          => $facts['ssh'][$key_type]['key'],
